@@ -1,27 +1,24 @@
-import { Db, MongoClient } from "mongodb";
+import mysql from "mysql2/promise";
 
-const url: string = process.env.DB_URL!;
+const dbconfig = {
+  host: 'localhost',
+  user: 'root',
+  password: process.env.DB_PW,
+  database: 'blog'
+}
 
-let db: Db;
+const pool = mysql.createPool(dbconfig);
 
-export const connectDB = async () => {
-  if (db) return db;
-
+export const query = async (sql: string, params?: any[]) => {
   try {
-    const client = new MongoClient(url);
-    await client.connect();
-    db = client.db("Test!!");
-    return db;
-  }
-  catch (e) {
-    throw new Error("DB 연결 중 에러가 발생했어요");
+    const [rows] = await pool.query(sql, params);
+    return rows;
+  } catch (error) {
+    console.error("쿼리 실행 중 에러:", error);
+    throw error;
   }
 }
 
-export const getDB = () => {
-  if (!db) {
-    throw new Error("DB 변수에 값이 할당되기 전에 DB변수를 호출했어요");
-  }
-
-  return db;
+export const closeConnection = async () => {
+  await pool.end();
 }

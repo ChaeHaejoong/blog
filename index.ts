@@ -1,20 +1,19 @@
 import express from "express";
-import path from "node:path";
-import { connectDB } from "./config/db";
-
+import cors from "cors";
+import { closeConnection } from "./config/db";
+import router from "./routes/route";
+import accessRouter from "./routes/access";
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
-connectDB()
-  .then(() => {
-    app.get("/", (req, res) => {
-      res.sendFile(path.join(__dirname, "public", "index.html"));
-    });
-    
-    app.listen(process.env.PORT);
-  })
-  .catch((e) => {
-    console.error(e);
-  })
+app.use("/", router);
+app.use("/access", accessRouter);
 
+process.on("SIGINT", async () => {
+  await closeConnection();
+  process.exit(0);
+})
+
+app.listen(process.env.PORT);

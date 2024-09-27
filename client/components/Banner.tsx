@@ -38,9 +38,7 @@ export default function Banner() {
           y={mousePosition.y}
           text={
             `실버 티어에요.
-            자랑할만한 티어가 아니란건 저도 알아요.
-            
-            미관용이에요.`
+            자랑할만한 티어가 아니란건 저도 알아요.`
           }
         ></MouseFollower>
       </BannerCard>
