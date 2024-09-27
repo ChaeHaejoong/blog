@@ -8,19 +8,16 @@ export default function useMouseFollower() {
   const handleMouseLeave = () => setIsHovered(false);
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (isHovered) {
-      setMousePosition({x: `${e.clientX}px`, y: `${e.clientY}px`});
-    }
+    setMousePosition({x: `${e.clientX}px`, y: `${e.clientY}px`});
   };
 
   useEffect(() => {
-    if (isHovered) {
-      window.addEventListener("mousemove", handleMouseMove);
-    }
+    window.addEventListener("mousemove", handleMouseMove);
+
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [isHovered]);
+  }, []);
 
   return { mousePosition, isHovered, handleMouseEnter, handleMouseLeave };
 }

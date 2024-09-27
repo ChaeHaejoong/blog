@@ -24,12 +24,10 @@ export default function MouseFollower(props: MouseFollowerProps) {
 
   const {isHovered, x, y, text} = props;
   return(
-     
     isHovered 
     && 
     <Box x={x} y={y}>
       {text}
     </Box>
-    
   )
 }
