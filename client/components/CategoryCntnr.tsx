@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 const Cntnr = styled.div`
   height: 250px;
-  // border: 1px solid black;
   padding: var(--sidePadding);
 `
 const TitleCntnr = styled.div`
