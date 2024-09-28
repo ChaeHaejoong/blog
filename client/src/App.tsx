@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom"
-import MainPage from "../pages/MainPage"
-import BlogPage from "../pages/BlogPage"
-import ProjectPage from "../pages/ProjectPage"
-import CategoryPage from "../pages/CategoryPage"
-import ArchivePage from "../pages/ArchivePage"
-import useAccessModal from "../hooks/useAccessModal"
-import AccessModal from "../components/AccessModal"
+import MainPage from "./pages/MainPage"
+import BlogPage from "./pages/BlogPage"
+import ProjectPage from "./pages/ProjectPage"
+import CategoryPage from "./pages/CategoryPage"
+import ArchivePage from "./pages/ArchivePage"
+import useAccessModal from "./hooks/useAccessModal"
+import AccessModal from "./components/AccessModal"
 
 function App() {
 
