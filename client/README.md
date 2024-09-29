@@ -1,50 +1,11 @@
-# React + TypeScript + Vite
+# todo list
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+1. 엑세스 모달에서 비밀번호 틀렸을시 보여줄 컴포넌트 업데이트 만들기
+2. 프론트엔드 에러 핸들러 만들기
+3. 에러 페이지 만들기
+4. 리덕스로 권한 접근, 에러 상태 관리 코드 만들기
+5. 관리자 권한시에 보여줄 컴포넌트 만들기
+6. JWT발급 + 로컬에 저장하는 로직 구현하기
+7. ERD만들기
+8. 백엔드 에러 핸들러 만들기
+9. 글 작성 양식 만들기(이미지 글 배치 생각하기, 리스트 형식, 제목 형식, 목차?) + DB에 어떻게 저장할지 생각하기

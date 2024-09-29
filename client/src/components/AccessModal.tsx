@@ -1,6 +1,7 @@
-import axios from "axios";
+import axios, { Axios, AxiosError } from "axios";
 import { useState } from "react";
 import styled, {keyframes} from "styled-components";
+import errorHandler from "../utils/errorHandler";
 
 const fadeIn = keyframes`
   from { opacity: 0; }
@@ -53,13 +54,13 @@ const Input = styled.input`
     border: 1px solid var(--duckOrange);
   }
 `
-const Button = styled.button`
+const Button = styled.button<{isKeyPressed: boolean}>`
   height: 30px;
   width: 50px;
   border: 1px solid var(--duckOrange);
   border-radius: 10px;
-  background-color: white;
-  color: var(--duckOrange);
+  background-color: ${({isKeyPressed}) => (isKeyPressed ? 'var(--duckOrange)' : 'white')};
+  color: ${({isKeyPressed}) => (isKeyPressed ? 'white' : 'var(--duckOrange)')};;
 
   &:hover {
     background-color: var(--duckOrange);
@@ -75,6 +76,7 @@ interface AccessModalProps {
 export default function AccessModal(props: AccessModalProps) {
 
   const { isModalOn, setIsModalOn } = props;
+  const [isKeyPressed, setIsKeyPressed] = useState<boolean>(false);
   const [accessKey, setAccessKey] = useState<string>("");
 
   const modalOff = () => {
@@ -89,8 +91,12 @@ export default function AccessModal(props: AccessModalProps) {
   }
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
+      setIsKeyPressed(true);
       handleFormSubmit(e)
     }
+  }
+  const handleKeyUp =() => {
+    setIsKeyPressed(false);
   }
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,15 +105,13 @@ export default function AccessModal(props: AccessModalProps) {
       if(response.status === 200) {
         console.log("로그인 성공")
         modalOff();
-      }
+      } 
       else {
-        console.log("로그인 실패")
-        modalOff();
+        // 비밀번호가 틀렸다는 정보를 저장하는 state 값 변경을 통해 컴포넌트 업데이트
       }
     }
     catch (e) {
-      console.log("로그인 실패")
-      modalOff();    
+      errorHandler(e as AxiosError);
     }
   }
 
@@ -121,8 +125,12 @@ export default function AccessModal(props: AccessModalProps) {
             value={accessKey}
             onChange={handleInputChange}
             onKeyDown={handleKeyPress}
+            onKeyUp={handleKeyUp}
           ></Input>
-          <Button type="submit">전송</Button>
+          <Button 
+            type="submit"
+            isKeyPressed={isKeyPressed}
+          >전송</Button>
         </FormCntnr>
       </InputCntnr>
     </Overlay>
