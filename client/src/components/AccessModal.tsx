@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useState } from "react";
 import styled, {keyframes} from "styled-components";
 
 const fadeIn = keyframes`
@@ -31,7 +33,7 @@ const InputCntnr = styled.div`
 const Title = styled.p`
   font-size: 20px;
 `
-const FormCntnr = styled.div`
+const FormCntnr = styled.form`
   display: flex;
   width: 100%;
   padding: 0 20px;
@@ -73,21 +75,54 @@ interface AccessModalProps {
 export default function AccessModal(props: AccessModalProps) {
 
   const { isModalOn, setIsModalOn } = props;
+  const [accessKey, setAccessKey] = useState<string>("");
 
-  const handleOverlayClick = () => {
+  const modalOff = () => {
     setIsModalOn(false);
   }
+
   const handleInputCntnrClick = (e: React.MouseEvent) => {
     e.stopPropagation();
   }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAccessKey(e.target.value);
+  }
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleFormSubmit(e)
+    }
+  }
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:3000/access', { accessKey })
+      if(response.status === 200) {
+        console.log("로그인 성공")
+        modalOff();
+      }
+      else {
+        console.log("로그인 실패")
+        modalOff();
+      }
+    }
+    catch (e) {
+      console.log("로그인 실패")
+      modalOff();    
+    }
+  }
 
   return(
-    <Overlay isModalOn={isModalOn} onClick={handleOverlayClick}>
+    <Overlay isModalOn={isModalOn} onClick={modalOff}>
       <InputCntnr onClick={handleInputCntnrClick}>
         <Title>관리자 권한 접근 비밀번호 입력</Title>
-        <FormCntnr>
-          <Input type="password"></Input>
-          <Button>전송</Button>
+        <FormCntnr onSubmit={handleFormSubmit}>
+          <Input 
+            type="password"
+            value={accessKey}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyPress}
+          ></Input>
+          <Button type="submit">전송</Button>
         </FormCntnr>
       </InputCntnr>
     </Overlay>
