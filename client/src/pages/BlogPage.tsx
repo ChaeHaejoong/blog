@@ -1,7 +1,8 @@
 import Loading from "../components/Loading";
+import Nav from "../components/Nav";
 
 export default function BlogPage() {
   return (
-    <Loading></Loading>
+    <Nav></Nav>
   )
 }

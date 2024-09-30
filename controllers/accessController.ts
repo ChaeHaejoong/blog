@@ -7,6 +7,6 @@ export const accessController = async (req: Request, res: Response) => {
     res.sendStatus(200);
   } else {
     console.log(accessKey)
-    res.sendStatus(402);
+    res.sendStatus(401);
   }
 }

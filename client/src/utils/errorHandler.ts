@@ -1,5 +1,5 @@
-import { AxiosError } from "axios";
+// import { AxiosError } from "axios";
 
-export default function errorHandler(error: AxiosError) {
+export default function errorHandler(e: Error) {
   // todo
 }

@@ -6,13 +6,15 @@ import CategoryPage from "./pages/CategoryPage"
 import ArchivePage from "./pages/ArchivePage"
 import useAccessModal from "./hooks/useAccessModal"
 import AccessModal from "./components/AccessModal"
+import { Provider } from "react-redux"
+import store from "./store/store"
 
 function App() {
 
   const { isModalOn, setIsModalOn } = useAccessModal();
 
   return (
-    <>
+    <Provider store={store}>
       { isModalOn && <AccessModal isModalOn={isModalOn} setIsModalOn={setIsModalOn}></AccessModal> }
       <Routes>
         <Route path="/" element={<MainPage />}></Route>
@@ -21,7 +23,7 @@ function App() {
         <Route path="/category" element={<CategoryPage />}></Route>
         <Route path="/archive" element={<ArchivePage />}></Route>
       </Routes>
-    </>
+    </Provider>
   )
 }
 

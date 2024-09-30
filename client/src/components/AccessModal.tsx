@@ -1,7 +1,9 @@
-import axios, { Axios, AxiosError } from "axios";
+import axios, { isAxiosError } from "axios";
 import { useState } from "react";
 import styled, {keyframes} from "styled-components";
 import errorHandler from "../utils/errorHandler";
+import { useDispatch } from "react-redux";
+import { permit } from "../store/Slices/accessSlice";
 
 const fadeIn = keyframes`
   from { opacity: 0; }
@@ -54,6 +56,16 @@ const Input = styled.input`
     border: 1px solid var(--duckOrange);
   }
 `
+const AlertBox = styled.div<{accessFail: boolean}>`
+  width: 100%;
+  background-color: tomato;
+  height: ${({accessFail}) => (accessFail ? '35px' : '0px')};
+  transition: all 1s;
+  display: flex;
+  justify-content: center;
+  place-items: center;
+  color: white;
+`
 const Button = styled.button<{isKeyPressed: boolean}>`
   height: 30px;
   width: 50px;
@@ -76,8 +88,12 @@ interface AccessModalProps {
 export default function AccessModal(props: AccessModalProps) {
 
   const { isModalOn, setIsModalOn } = props;
+
   const [isKeyPressed, setIsKeyPressed] = useState<boolean>(false);
+  const [accessFail, setAccessFail] = useState<boolean>(false);
   const [accessKey, setAccessKey] = useState<string>("");
+
+  const dispatch = useDispatch();
 
   const modalOff = () => {
     setIsModalOn(false);
@@ -102,16 +118,24 @@ export default function AccessModal(props: AccessModalProps) {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3000/access', { accessKey })
-      if(response.status === 200) {
-        console.log("로그인 성공")
+      if (response.status === 200) {
+        dispatch(permit());
         modalOff();
       } 
-      else {
-        // 비밀번호가 틀렸다는 정보를 저장하는 state 값 변경을 통해 컴포넌트 업데이트
-      }
     }
     catch (e) {
-      errorHandler(e as AxiosError);
+      if (isAxiosError(e)) {
+        if (e.status === 401) {
+          setAccessKey("");
+          setAccessFail(true);
+          setTimeout(() => {
+            setAccessFail(false);
+          }, 2000)
+        }
+        else {
+          errorHandler(e);
+        }
+      } 
     }
   }
 
@@ -132,6 +156,7 @@ export default function AccessModal(props: AccessModalProps) {
             isKeyPressed={isKeyPressed}
           >전송</Button>
         </FormCntnr>
+        <AlertBox accessFail={accessFail}>비밀번호 그거 아닌데</AlertBox>
       </InputCntnr>
     </Overlay>
   )

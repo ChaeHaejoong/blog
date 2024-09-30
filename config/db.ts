@@ -13,7 +13,8 @@ export const query = async (sql: string, params?: any[]) => {
   try {
     const [rows] = await pool.query(sql, params);
     return rows;
-  } catch (error) {
+  } 
+  catch (error) {
     console.error("쿼리 실행 중 에러:", error);
     throw error;
   }
